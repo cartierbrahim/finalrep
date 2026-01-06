@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 void main() {
   runApp(const FinalRepApp());
@@ -16,23 +17,39 @@ class FinalRepApp extends StatelessWidget {
   }
 }
 
-class ReadyScreen extends StatelessWidget {
+class ReadyScreen extends StatefulWidget {
   const ReadyScreen({super.key});
 
   @override
+  State<ReadyScreen> createState() => _ReadyScreenState();
+}
+
+class _ReadyScreenState extends State<ReadyScreen> {
+  String message = 'FinalRep\nReady to move.';
+  final FlutterTts tts = FlutterTts();
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
-              'FinalRep\nReady to move.',
+              message,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 30),
-            ElevatedButton(onPressed: null, child: Text('Start Workout')),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  message = 'FinalRep\nStarting… let’s go 💪';
+                });
+                await tts.speak('FinalRep starting... lets go!');
+              },
+              child: const Text('Start Workout'),
+            ),
           ],
         ),
       ),
